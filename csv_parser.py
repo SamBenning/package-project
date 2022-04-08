@@ -14,11 +14,14 @@ def get_distance_map():
         for k, row in enumerate(reader):
             if flag:
                 street_address = row[0].splitlines()[1].strip()
+                if street_address == "3575 W Valley Central Sta bus Loop":
+                    street_address = "3575 W Valley Central Station bus Loop"
                 # distance_list_row = []
                 # print(row[2])
                 for i in range(2, len(row)):
                     if row[i]:
                         current_address = header_addresses[i-2]
+
                         print(row[1])
                         # current_address = row[1][0:(len(row[1]-8))]
                         current_distance = float(row[i])
@@ -54,9 +57,13 @@ def get_distance_map():
                 for heading in row:
                     items = heading.splitlines()
                     current_heading = items[1].strip()
+                    if current_heading == "3575 W Valley Central Sta bus Loop":
+                        current_heading = "3575 W Valley Central Station bus Loop"
                     header_addresses.append(current_heading)
                     distance_map.add(current_heading, [])
+                    print(current_heading)
                 flag = True
+                print("Distance Map: ")
                 distance_map.print()
     return distance_map
 

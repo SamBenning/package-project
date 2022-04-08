@@ -1,3 +1,5 @@
+import datetime
+
 from package import Package
 
 class Truck:
@@ -8,6 +10,7 @@ class Truck:
         self.time = None
         self.packages = []
         self.next_delivery = []
+        self.delivered_packages = []
 
     def add_package(self, package):
         package.delivery_status = 'IN TRANSIT - ON TRUCK #' + str(self.id)
@@ -28,6 +31,7 @@ class Truck:
             self.next_delivery.remove(package)
             print("Delivered package #" + str(package.id))
             self.packages.remove(package)
+            self.delivered_packages.append(package)
         print("---END DELIVERY---")
 
     def add_mileage(self, miles):
