@@ -58,20 +58,3 @@ class HashMap:
         for i in self.map:
             if i:
                 print(str(i))
-
-
-# h = HashMap(10)
-# h.add('Bob', '567-8888')
-# h.add('Mary', '123-3333')
-# h.add('Sam', '444-5678')
-# h.add('Bre', '111-3333')
-# h.add('Tim', '222-3823')
-# h.print()
-# h.add('Bob', '666-6666')
-# h.add('Sam', 'this is a test')
-# h.print()
-# h.delete('Sam')
-# h.delete('Mary')
-# h.print()
-# h.add('Sam', 'im back')
-# h.print()
