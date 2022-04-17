@@ -1,10 +1,14 @@
 import csv
-from hash import HashMap
+from hash import HashTable
 from package import Package
 
-
+# This function uses the distance-table csv file to generate a distance map using the custom hash table class
+# found in hash.py. It works by iterating through each row, column cell. It creates a pairing of both row, column, and
+# column row, then it adds that pairing to the distance list of both the respective row address and column address.
+# This is necessary to store all distance pairings. If we just add the row, column pairs to the hash table, we only
+# get half of the distance pairings, and not the full.
 def get_distance_map():
-    distance_map = HashMap(64)
+    distance_map = HashTable(64)
     header_addresses = []
     with open("distance-table.csv", 'r', newline='') as fp:
         reader = csv.reader(fp, delimiter=",", quotechar='"')
@@ -31,7 +35,6 @@ def get_distance_map():
                         current_row_pairs.append(distance_pair_row)
                         if distance_pair_column not in current_column_pairs:
                             current_column_pairs.append(distance_pair_column)
-
                         distance_map.add(street_address, current_row_pairs)
                         distance_map.add(current_address, current_column_pairs)
                 if addresses_added < len(header_addresses):
@@ -49,9 +52,10 @@ def get_distance_map():
                 flag = True
     return distance_map
 
-
+# This is much simpler than the distance table. It creates a hash table out of the package-file csv by iterating
+# through each row and creating a new Package object by feeding the appropriate cell data into the package constructor.
 def get_package_map():
-    package_map = HashMap(64)
+    package_map = HashTable(64)
     with open("package-file.csv", 'r', newline='') as package_file:
         package_reader = csv.reader(package_file, delimiter=",", quotechar='"')
         next(package_reader, '')

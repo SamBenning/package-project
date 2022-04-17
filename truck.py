@@ -1,7 +1,3 @@
-import datetime
-
-from package import Package
-
 class Truck:
     def __init__(self, id, location):
         self.id = id
@@ -14,7 +10,7 @@ class Truck:
 
     def add_package(self, package):
         package.delivery_status = 'IN TRANSIT - ON TRUCK #' + str(self.id)
-        self.packages.append((package))
+        self.packages.append(package)
 
     def remove_package(self, package):
         self.packages.remove(package)

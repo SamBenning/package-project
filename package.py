@@ -1,5 +1,3 @@
-from datetime import datetime as dt
-
 class Package:
     def __init__(self, id, address, city, zip_code, deadline, weight, notes):
         self.id = id

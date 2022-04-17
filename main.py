@@ -73,6 +73,7 @@ def create_truck_delivery_matrix(truck):
             delivery_matrix.update(new_entry)
     return delivery_matrix
 
+
 # This function determines a truck's next location based on the neighbor in the delivery matrix with the highest
 # calculated score. This is a somewhat
 # modified version the Nearest Neighbor Algorithm. Rather than picking the neighbor with the shortest distance to the
@@ -80,7 +81,7 @@ def create_truck_delivery_matrix(truck):
 # distance is in the denominator, if two neighbors share the same priority (meaning they have the same deadline), the
 # one with the shorter distance will always have a higher score. However, a higher priority neighbor may have a higher
 # score even if it's distance is greater.
-def route_2(truck, current_location, delivery_matrix):
+def route(truck, current_location, delivery_matrix):
     neighbors = distance_map.get(current_location)
     best_neighbor = neighbors[0]
     best_neighbor_score = 0
@@ -102,6 +103,7 @@ def route_2(truck, current_location, delivery_matrix):
     packages_at_best_neighbor = delivery_matrix.get(best_neighbor[0])[0]
     truck.next_delivery = packages_at_best_neighbor
     return best_neighbor
+
 
 # This function takes a truck and a location, and handles updating all the relevant data for the truck to travel there.
 # It also handles checking if 10:20am has passed yet, and then it does a series of checks to determine the status of
@@ -146,6 +148,7 @@ def goto(truck, location, end_time=None):
     truck.make_delivery(truck.time)
     return 0
 
+
 # This function simply returns a truck to the hub and updates the truck accordingly.
 def go_home(truck):
     dist_list = distance_map.get(truck.location)
@@ -156,6 +159,7 @@ def go_home(truck):
     truck.time += datetime.timedelta(hours=(dist_to_hub / 18))
     truck.add_mileage(dist_to_hub)
     truck.location = "4001 South 700 East,"
+
 
 # This function runs a single truck until it has no more packages left to deliver, then returns it to the hub.
 # If the goto function returns 1, indicating that the end_time would have been exceeded travelling to the next location,
@@ -169,11 +173,12 @@ def run_truck(truck, end_time=None):
         end_time = datetime.datetime(2022, 1, 1, 23, 59, 59)
     while truck.packages:
         truck_delivery_matrix = create_truck_delivery_matrix(truck)
-        next_location = route_2(truck, truck.location, truck_delivery_matrix)
+        next_location = route(truck, truck.location, truck_delivery_matrix)
         goto_status = goto(truck, next_location, end_time)
         if goto_status == 1:
             return 0
     go_home(truck)
+
 
 # This function removes packages from the packages_at_hub list and loads the into the specified truck until capacity is
 # reached, or no more packages are left at the hub.
@@ -181,6 +186,7 @@ def load_truck(truck):
     while len(truck.packages) < 16 and packages_at_hub:
         first_package = packages_at_hub.pop(0)
         truck.add_package(first_package)
+
 
 # This function handles the initial loading of the trucks. I am essentially hand-loading the trucks here. Packages
 # meeting certain criteria go on specified trucks, and then the remainder of the trucks' capacity is filled with the
@@ -236,6 +242,7 @@ def validate_time_input(time_string):
         return False
     return True
 
+
 # Formats and prints the status report to display to the console.
 def print_status_report(trucks, report_time=None):
     if not report_time:
@@ -256,17 +263,19 @@ def print_status_report(trucks, report_time=None):
     print("Press Enter to continue")
     input()
 
+
 # Prints a formatted menu for the CLI.
 def print_main_menu():
     print("--------------------------------------\n")
     print("\t\tWGUPS ROUTING PROGRAM")
     print("\t\tCreated by: Samuel Benning")
     print("\n--------------------------------------")
-    print("\n\nType the number of the menu item, then press enter:\n")
+    print("\n\nType the number of the menu item, then press Enter:\n")
     print("1. Set specific time and generate status report")
     print("2. Jump to End of Day (delivers all packages) and generate status.")
     print("3. Lookup package by ID")
     print("4. Quit the program")
+
 
 # Resets the state of the program so that it can be run again.
 def reset_state():
@@ -287,6 +296,7 @@ def reset_state():
     truck_2.next_delivery.clear()
     truck_2.time = datetime.datetime(2022, 1, 1, 0, 0, 0, 0)
     truck_2.time = truck_2.time + datetime.timedelta(hours=9, minutes=5)
+
 
 # Provides the command line interface for the user.
 def main():
@@ -310,6 +320,21 @@ def main():
                 start_day(([truck_1, truck_2]))
                 print_status_report([truck_1, truck_2])
                 reset_state()
+            elif int(x) == 3:
+                print("Please enter the package id: ")
+                input_package_id = input()
+                try:
+                    print("\n\nGetting package.....\n\n")
+                    package_map.get(int(input_package_id)).print()
+                    print("\n\nPress Enter to continue.\n\n")
+                    input()
+                    continue
+                except:
+                    print("\n\nError, could not find package. Press Enter to continue.")
+                    input()
+                    continue
+            elif int(x) == 4:
+                break
         except ValueError:
             continue
 
